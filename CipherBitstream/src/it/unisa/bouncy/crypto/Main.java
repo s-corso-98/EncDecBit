@@ -76,7 +76,7 @@ public class Main {
     	frame.setTitle("Encrypter/Decrypter bitstream tool");
     	frame.add(top,BorderLayout.NORTH);
     	frame.add(center,BorderLayout.SOUTH);
-    	frame.setSize(400, 300);
+    	frame.setSize(500, 300);
     	
 
         frame.setVisible(true);
@@ -92,8 +92,7 @@ public class Main {
 		        try {
 					file_to_encrypt = choosen.getCanonicalPath();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Tried to open an invalid file!");
 				}
             }
         });
@@ -106,7 +105,7 @@ public class Main {
 		        try {
 					keyGen = KeyGenerator.getInstance("DES");
 				} catch (NoSuchAlgorithmException e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Wrong key passed, it must have a size of 56");
 				}
 		        // If you do not initialize the KeyGenerator, each provider supply a default initialization.
 		        keyGen.init(des.getKey());
@@ -116,8 +115,7 @@ public class Main {
 		        try {
 					cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 				} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Unable to initialize DES cipher");
 				}
 				JOptionPane.showMessageDialog(null,"Key entered successfully");
 			}
@@ -131,23 +129,20 @@ public class Main {
 		        try {
 					cipher.init(Cipher.ENCRYPT_MODE, key);
 				} catch (InvalidKeyException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Wrong cipher moder or wrong key size");
 				}
 		        // Encrypt the plaintext using the public key
 		        byte[] cipherText = null;
 				try {
 					cipherText = cipher.doFinal(des.readFileAsByte(file_to_encrypt));
 				} catch (IllegalBlockSizeException | BadPaddingException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Tried to encrypt the wrong or it doesn't exist or it's not an encrypted bitstream");
 				}
 		        //Bitstream cifrato
 		        try {
 					des.writeBitstreamToFile(cipherText, "output_encrypted.txt");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Tried to write into the wrong file or it doesn't exist");
 				}
 				JOptionPane.showMessageDialog(null,"Encryption completed and saved into output_encrypted.txt");
 		        System.out.println( "Finish encryption:");
@@ -164,23 +159,20 @@ public class Main {
 		        try {
 					cipher.init(Cipher.DECRYPT_MODE, key);
 				} catch (InvalidKeyException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Wrong cipher moder or wrong key size");
 				}
 		        // Decrypt the ciphertext using the same key
 		        byte[] newPlainText = null;
 				try {
 					newPlainText = cipher.doFinal(des.readFileAsByte("output_encrypted.txt"));
 				} catch (IllegalBlockSizeException | BadPaddingException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Tried to decrypt the wrong or it doesn't exist or it's not an encrypted bitstream");
 				}
 		        //Bitstream decifrato
 		        try {
 					des.writeBitstreamToFile(newPlainText, "output_decrypted.txt");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Tried to write into the wrong file or it doesn't exist");
 				}
 				JOptionPane.showMessageDialog(null,"Decryption completed and saved into output_decrypted.txt");
 		        System.out.println( "Finish decryption");
